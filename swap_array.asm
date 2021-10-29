@@ -186,8 +186,10 @@ main_failed:
         
 main_exit:      
 	# TODO: Write code to properly exit a SPIM simulation
+    li $v0 10
+    syscall
+    #ez
 
-        
 # COPYFROMHERE - DO NOT REMOVE THIS LINE
 
 doSwap:
@@ -206,9 +208,42 @@ doSwap:
         # x+=2; 
         # y-=2; 
         # }
+        
+        #addresses for the array go from 0 to 44 - remember this, me
+        #register t0 is also where the array is at. For example 0($t0)
+        #is the first value in the array. Each number is 4 bytes long, so
+        #we will have to add by 8 and sub by 8 respectivly from each side
+    
+        #therefore, load in intial addresses 4 and 40
+        li $t1 4
+        li $t2 40
+        #as well as the temp holder register
+        li $t3 0
+        # I'm not sure how unsigned add/sub will work with the incrementation
+        #type stuff, so to be safe here's a holder value with 8 in it
+        li $t4 8
 
+swapLoop:
+        #the c code has it so that x < 6. That means we want the left address to
+        #be less that 6 x 4 = 24
+    
+        #opposite of x < 6 -> greater than or equal to
+        bge $t1 24
+        
+        #copy values over to temp
+        move $t3 $t1($t0)
 
-        # TODO: fill in the code
+        #initiate swapperz
+        move $t1($t0) $t2($t0)      # x = y
+        move $t2($t0) $t3           # y = temp
+
+        # ^^^ I hope this works!
+        
+        #decrement/increment
+        addu $t1 $t1 $t4
+        subu $t2 $t2 $t4
+
+        j swapLoop
 
         # do not remove this last line
         jr $ra
