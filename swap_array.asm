@@ -228,7 +228,7 @@ swapLoop:
         #be less that 6 x 4 = 24
     
         #opposite of x < 6 -> greater than or equal to
-        bge $t1 24
+        bge $t1 24 swapExit
         
         #copy values over to temp
         move $t3 $t1($t0)
@@ -247,3 +247,6 @@ swapLoop:
 
         # do not remove this last line
         jr $ra
+
+swapExit:
+#meep. Just here for bge to work
