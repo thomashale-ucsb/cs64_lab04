@@ -214,14 +214,18 @@ doSwap:
         #is the first value in the array. Each number is 4 bytes long, so
         #we will have to add by 8 and sub by 8 respectivly from each side
     
-        #therefore, load in intial addresses 4 and 40
-        li $t1 4
-        li $t2 40
+        #current address count of t1
+        li $t5 4
+
         #as well as the temp holder register
         li $t3 0
         # I'm not sure how unsigned add/sub will work with the incrementation
         #type stuff, so to be safe here's a holder value with 8 in it
         li $t4 8
+
+        #loading addresses into t1 and t2
+        lw $t1 4($t0)
+        lw $t2 44($t0)
 
 swapLoop:
         #the c code has it so that x < 6. That means we want the left address to
@@ -231,22 +235,29 @@ swapLoop:
         bge $t1 24 swapExit
         
         #copy values over to temp
-        move $t3 $t1($t0)
+        lw $t3 0($t0)
 
         #initiate swapperz
-        move $t1($t0) $t2($t0)      # x = y
-        move $t2($t0) $t3           # y = temp
+        move $t1 $t2                # x = y
+        move $t2 $t3                # y = temp
 
         # ^^^ I hope this works!
         
         #decrement/increment
-        addu $t1 $t1 $t4
-        subu $t2 $t2 $t4
+        
+        addiu $t1 $t1 $t4
+        addu  $t5 $t5 $t4
+
+        subiu $t2 $t2 $t4
+
+        #old code:
+        #addu $t1 $t1 $t4
+        #subu $t2 $t2 $t4
 
         j swapLoop
-
+swapExit:
+# meep. Just here for bge to work, as well as ending the thing
         # do not remove this last line
         jr $ra
 
-swapExit:
-#meep. Just here for bge to work
+
