@@ -49,7 +49,7 @@ main:
 factLoop:
     
     #if (n < 0) --> stop looping
-    ble $t0 $t2 exitStuff
+    ble $t0 1 exitStuff
     
     #action stuff
     mult $t1 $t0
