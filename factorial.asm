@@ -21,8 +21,14 @@
 
     #numbs and anaesthesia
     li $t0 0        #loop count stuff
-    li $t1 1        #factorialz and logic stuff
+    li $t1 0        #factorialz and logic stuff
     li $t2 0        #holder value for num being factorialed
+    
+    # $t1 is being a little ***** time to crack open this puppy
+    #li $v0 1
+    #move $a0 $t1
+    #add $a0 $a0 $0
+    #syscall
 
 #Text Area (i.e. instructions)
 .text
@@ -32,6 +38,9 @@ main:
     
 	# TODO: Write your code here
     
+    # can't initialize variables to anything but 0 in .data, so here it is
+    li $t1 1
+
     #printing out the questioning statement
     li $v0 4
     la $a0 askNum
@@ -58,15 +67,11 @@ factLoop:
     #decrement schizz
     add $t0 $t0 -1
     
-    #testing print --> this isn't even working??????
-    li $v0 1
-    move $a0 $t0
-    add $a0 $a0 $0
-    syscall
-    
-    li $v0 4
-    la $a0 is
-    syscall
+    #testing print
+    #li $v0 1
+    #move $a0 $t0
+    #add $a0 $a0 $0
+    #syscall
 
     j factLoop
 
@@ -80,7 +85,7 @@ exitStuff:
     la $a0 shapirz
     syscall
 
-    #num being factorialed
+    #num being factorialized
     li $v0 1
     move $a0 $t2
     add $a0 $a0 $0
