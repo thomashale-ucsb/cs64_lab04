@@ -221,16 +221,18 @@ doSwap:
 
         #as well as the temp holder register
         li $t3 0
-        # I'm not sure how unsigned add/sub will work with the incrementation
-        #type stuff, so to be safe here's a holder value with 8 in it
-        li $t4 8
+        li $t4 0
         
-        li $t6 24
+        #li $t6 24 - unnecessary
 
         #loading addresses into t1 and t2
-        lw $t1 4($t0)
-        lw $t2 44($t0)
+        #lw $t1 4($t0)
+        #lw $t2 44($t0)
         
+        #trying other way to load addresses:
+        addiu $t1 $t0 4
+        addiu $t1 $t0 44
+
         j swapLoop
 
 swapLoop:
@@ -253,10 +255,11 @@ swapLoop:
 
         #copy values over to temp
         lw $t3 0($t1)
+        lw $t4 0($t2)
 
         #initiate swapperz
-        sw $t1 0($t2)                # x = y
-        sw $t2 0($t3)                # y = temp
+        sw $t4 0($t1)                # x = y
+        sw $t3 0($t2)                # y = temp
 
         # ^^^ I hope this works!
         
