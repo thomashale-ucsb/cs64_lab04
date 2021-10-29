@@ -21,6 +21,7 @@ main:
     li $t0 0
     li $t1 0
     li $t2 0
+    li $t3 0
 
     # ask/get input 1
     li $v0 4
@@ -58,26 +59,27 @@ main:
     j great2
 
 #if $t0 >= $t1
+
 great1:
 #now see if $t0 >= $t2
-    li $t3 $t0
+    move $t3 $t0
     bge $t0 $t2 exitPrint
 
 #essentially else case
-    li $t3 $t2
+    move $t3 $t2
     j exitPrint
 
 #if $t1 >= $t0
+
 great2:
 #now see if $t1 >= $t2
-    li $t3 $t1
+    move $t3 $t1
     bge $t1 $t2 exitPrint
 
 #else 
-    li $t3 $t2
+    move $t3 $t2
     j exitPrint
     
-
 exitPrint:
     
     #print what's in #t3
@@ -89,6 +91,12 @@ exitPrint:
     move $a0 $t3
     add $a0 $a0 $0
     syscall
+
+    #end /n "endln"
+    li $v0 4
+    la $a0 endln
+    syscall
+
 
 exit:
     #exiting instructions
