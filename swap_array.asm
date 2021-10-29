@@ -222,18 +222,42 @@ doSwap:
         # I'm not sure how unsigned add/sub will work with the incrementation
         #type stuff, so to be safe here's a holder value with 8 in it
         li $t4 8
+        
+        li $t6 24
 
         #loading addresses into t1 and t2
         lw $t1 4($t0)
         lw $t2 44($t0)
+        
+        j swapLoop
 
 swapLoop:
         #the c code has it so that x < 6. That means we want the left address to
         #be less that 6 x 4 = 24
-    
-        #opposite of x < 6 -> greater than or equal to
-        bge $t1 24 swapExit
         
+        #printing t1 and t2
+        #t1
+        #li $v0 1
+        #lw $a0 0($t1)
+        #syscall
+
+        #t2
+        #li $v0 1
+        #lw $a0 0($t2)
+        #syscall
+        
+        #print random shit cuz assembly is ASS
+        li $v0 1
+        li $a0 5
+        syscall
+
+        #opposite of x < 6 -> greater than or equal to
+        bge $t5 24 swapExit
+        
+        li $v0 1
+        li $a0 6
+        syscall
+
         #copy values over to temp
         lw $t3 0($t0)
 
@@ -243,12 +267,19 @@ swapLoop:
 
         # ^^^ I hope this works!
         
+        li $v0 1
+        li $a0 7
+        syscall
+
         #decrement/increment
         
-        addiu $t1 $t1 $t4
-        addu  $t5 $t5 $t4
+        addiu $t1 $t1 8
+        addu  $t5 $t5 8
 
-        subiu $t2 $t2 $t4
+        subiu $t2 $t2 8
+        
+        li $v0 1
+        li $a0 42
 
         #old code:
         #addu $t1 $t1 $t4
