@@ -16,12 +16,13 @@
     # kk teacher
     askNum: .asciiz "Enter a number:\n"
     shapirz: .asciiz "Factorial of "
-    is: .asciiz "is:\n"
+    is: .asciiz " is:\n"
     endln: .asciiz "\n"
 
     #numbs and anaesthesia
     li $t0 0        #loop count stuff
     li $t1 1        #factorialz and logic stuff
+    li $t2 0        #holder value for num being factorialed
 
 #Text Area (i.e. instructions)
 .text
@@ -40,19 +41,32 @@ main:
     li $v0 5
     syscall
     add $t0 $v0 $0
+    move $t2 $t0
+    
+    j factLoop
 
 #looping stuff lol
 factLoop:
     
     #if (n < 0) --> stop looping
-    ble $t0 1 exitStuff
+    ble $t0 $t2 exitStuff
     
     #action stuff
-    mult $t0 $t1
+    mult $t1 $t0
     mflo $t1
     
     #decrement schizz
-    add $t0 -1
+    add $t0 $t0 -1
+    
+    #testing print --> this isn't even working??????
+    li $v0 1
+    move $a0 $t0
+    add $a0 $a0 $0
+    syscall
+    
+    li $v0 4
+    la $a0 is
+    syscall
 
     j factLoop
 
@@ -68,7 +82,8 @@ exitStuff:
 
     #num being factorialed
     li $v0 1
-    la $a0 $t0
+    move $a0 $t2
+    add $a0 $a0 $0
     syscall
     
     #is
@@ -78,7 +93,8 @@ exitStuff:
 
     #factz and logicz (factorial number)
     li $v0 1
-    la $a0 $t1
+    move $a0 $t1
+    add $a0 $a0 $0
     syscall
 
     #endln
