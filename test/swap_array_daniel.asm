@@ -186,10 +186,9 @@ main_failed:
         
 main_exit:      
 	# TODO: Write code to properly exit a SPIM simulation
-    li $v0 10
-    syscall
-    #ez
-
+	li $v0 10
+	syscall
+        
 # COPYFROMHERE - DO NOT REMOVE THIS LINE
 
 doSwap:
@@ -208,79 +207,55 @@ doSwap:
         # x+=2; 
         # y-=2; 
         # }
-        
-        #addresses for the array go from 0 to 44 - remember this, me
-        #register t0 is also where the array is at. For example 0($t0)
-        #is the first value in the array. Each number is 4 bytes long, so
-        #we will have to add by 8 and sub by 8 respectivly from each side
-    
-        la $t0 myArray
 
-        #current address count of t1
-        li $t5 4
 
-        #as well as the temp holder register
-        li $t3 0
-        # I'm not sure how unsigned add/sub will work with the incrementation
-        #type stuff, so to be safe here's a holder value with 8 in it
-        li $t4 8
-        
-        li $t6 24
+        # TODO: fill in the code
+	li $t0 1	# leftmost index holding second element
+	li $t1 11	# rightmost index holding 12th element
+	li $t3 6	# checks if left index goes past middle index
 
-        #loading addresses into t1 and t2
-        lw $t1 4($t0)
-        lw $t2 44($t0)
-        
-        j swapLoop
+	la $t4 myArray 
+	addiu $t6 $t4 44 # 12th element of array
+	addiu $t4 $t4 4 # second element of array
 
-swapLoop:
-        #the c code has it so that x < 6. That means we want the left address to
-        #be less that 6 x 4 = 24
-        
-        # t1 left pointer, t2 right pointer
+	
+while_loop:
+	#while-loop
+	bge $t0 $t3 jump_back
 
-        #print random shit cuz assembly is ASS
-        #li $v0 1
-        #li $a0 5
-        #syscall
+	# $t4 myArray left index being tracked
+	# $t6 myArray right index being tracked
 
-        #opposite of x < 6 -> greater than or equal to
-        bge $t5 24 swapExit
-        
-        #li $v0 1
-        #li $a0 6
-        #syscall
+	# save temporary value for left side
+	lw $t5 0($t4)
+	# move $a0 $t5
+	# li $v0 1
+	# syscall
+	
+	# save temporary value for right side
+	lw $t7 0($t6)
+	# move $a0 $t7
+	# li $v0 1
+	# syscall
 
-        #copy values over to temp
-        lw $t3 0($t1)
+	# doesn't work, garbage values that are in sequence
+	# solution, found out that I was storing memory address into $t4
+	# sw $t6 0($t4)
+	# store left element into right index
+	sw $t7 0($t4)
+	
+	# right side of array has elements changed: works
+	sw $t5 0($t6)
 
-        #initiate swapperz
-        sw $t1 0($t2)                # x = y
-        sw $t2 0($t3)                # y = temp
+	# moving index variables x+y
+	addi $t0 $t0 2	# x+=2
+	addi $t1 $t1 -2	# y-=2
 
-        # ^^^ I hope this works!
-        
-        #li $v0 1
-        #li $a0 7
-        #syscall
+	# moving my indexes of array
+	addiu $t4 $t4 8
+	addiu $t6 $t6 -8
 
-        #decrement/increment
-        
-        #x
-        addiu $t1 $t1 8
-        addu  $t5 $t5 8
-        
-        #y
-        addiu $t2 $t2 -8
-        
-        #li $v0 1
-        #li $a0 42
-        #syscall
-
-        j swapLoop
-swapExit:
-# meep. Just here for bge to work, as well as ending the thing
-        # do not remove this last line
+	j while_loop
+	
+jump_back: # do not remove this last line
         jr $ra
-
-
