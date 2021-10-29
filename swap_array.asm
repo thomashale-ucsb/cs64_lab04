@@ -224,14 +224,16 @@ doSwap:
         li $t4 0
         
         #li $t6 24 - unnecessary
+        
 
+        #doesn't work: not sure why
         #loading addresses into t1 and t2
         #lw $t1 4($t0)
         #lw $t2 44($t0)
         
         #trying other way to load addresses:
         addiu $t1 $t0 4
-        addiu $t1 $t0 44
+        addiu $t2 $t0 44
 
         j swapLoop
 
